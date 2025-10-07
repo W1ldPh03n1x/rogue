@@ -44,18 +44,22 @@
   <script src="src/items.js"></script>
   <script src="src/characters.js"></script>
   <script src="src/renderer.js"></script>
+  <script src="src/tests.js"></script>
   <script src="main.js"></script>
   <script>
     var game = new Game();
-    var renderer = new Renderer(".field", 50);
+    var renderer = new Renderer(".field", 25);
     game.init(renderer);
 
     function start() {
       game.start();
     }
+    start();
 
     window.addEventListener("keydown", function (event) {
       game.executeIteration(event);
     });
+
+    // testGenerationDungeonReachability(1000000);
   </script>
 </html>

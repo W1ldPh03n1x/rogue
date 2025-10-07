@@ -47,6 +47,7 @@ var Dungeon = (function () {
   self.generateCorridors = function (count) {
     var verticals = 0;
     var horizontals = 0;
+
     for (var i = 0; i < this.rooms.length; i++) {
       var room = this.rooms[i];
 
@@ -54,34 +55,46 @@ var Dungeon = (function () {
 
       if (room.corridors.length === 1) {
         if (room.corridors[0].type === "vertical") {
+          if (verticals >= 5) continue;
           corridorCandidate = this.generateHorizontalCorridor(
             room.y,
             room.y + room.height
           );
         } else {
+          if (horizontals >= 5) continue;
           corridorCandidate = this.generateVerticalCorridor(
             room.x,
             room.x + room.width
           );
         }
       } else if (room.corridors.length == 0) {
-        corridorCandidate = this.generateRoomCorridor(room);
+        if (
+          Math.random() >
+          (5 - verticals) / (5 - horizontals + 5 - verticals)
+        ) {
+          corridorCandidate = this.generateVerticalCorridor(
+            room.x,
+            room.x + room.width
+          );
+        } else {
+          corridorCandidate = this.generateHorizontalCorridor(
+            room.y,
+            room.y + room.height
+          );
+        }
       }
 
       if (!corridorCandidate) continue;
 
       if (corridorCandidate.type === "vertical") {
-        if (verticals >= 5) continue;
-        else verticals++;
-      }
-      if (corridorCandidate.type === "horizontal") {
-        if (horizontals >= 5) continue;
-        else horizontals++;
+        verticals++;
+      } else {
+        horizontals++;
       }
 
       this.addCorridorToRooms(corridorCandidate);
 
-      if (corridorCandidate) this.corridors.push(corridorCandidate);
+      this.corridors.push(corridorCandidate);
     }
 
     while (verticals < 3) {
@@ -156,7 +169,7 @@ var Dungeon = (function () {
         xCandidate = x1;
       }
       if (xCandidate === x) {
-        return breack;
+        break;
       }
     }
 
@@ -189,7 +202,7 @@ var Dungeon = (function () {
       }
 
       if (yCandidate === y) {
-        return null;
+        break;
       }
     }
 
